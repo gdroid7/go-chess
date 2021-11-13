@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-func ToChar(i int, j int) string {
+func ToChar(i int) string {
 	//Get ascii characters
-	return fmt.Sprintf("%s%d", string('A'+i), j+1)
+	return fmt.Sprintf("%s", string('A'+i))
 }
 
 func SanitizeInputs(arr []string) []string {

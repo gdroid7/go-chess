@@ -67,6 +67,12 @@ func TestValidateMove(t *testing.T) {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
 	}
 
+	ok, err = util.ValidateMove("KING", "A0", cbLen)
+
+	if ok && err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	}
+
 	ok, err = util.ValidateMove("BI", "A1", cbLen)
 
 	if ok && err != nil {
@@ -106,7 +112,7 @@ func TestFindCoordinatesTest(t *testing.T) {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=1 y=0 , got error %s", err.Error()))
 	}
 
-	if x != 1 || y != 0 {
-		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=1 y=0, got  x=%d y=%d", x, y))
+	if x != 0 || y != 0 {
+		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=0 y=0, got  x=%d y=%d", x, y))
 	}
 }

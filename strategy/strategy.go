@@ -2,6 +2,9 @@ package strategy
 
 import (
 	"errors"
+	"fmt"
+
+	"example.com/t/util"
 )
 
 type FindPossibleMoves func(pos string) bool
@@ -37,7 +40,7 @@ func GetPieceWithStrategy(pieceType string) (Piece, error) {
 
 func PawnWalk() func(x int, y int) {
 	return func(x int, y int) {
-
+		fmt.Println(fmt.Sprintf("%s%d", util.ToChar(y), x+2))
 	}
 }
 

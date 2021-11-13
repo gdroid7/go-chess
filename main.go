@@ -42,9 +42,9 @@ func main() {
 
 	position := args[1]
 
-	_, _, err = util.FindCoordinates(position)
+	x, y, err := util.FindCoordinates(position)
 
-	piece.FindPossibleMoves(1, 1)
+	piece.FindPossibleMoves(x, y)
 
 	return
 }

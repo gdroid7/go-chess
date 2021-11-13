@@ -13,6 +13,7 @@ import (
 
 var MIN_POSITION_LEN = 2
 var MAX_POSITION_LEN = 2
+var CharMap map[string]int
 
 func CreateEmptyChessboard(size int) [][]int {
 
@@ -30,10 +31,18 @@ func CreateEmptyChessboard(size int) [][]int {
 			cb[v] = append(cb[v], 0)
 		}
 	}
-
-	MIN_POSITION_LEN = len(cb) % 10
-
+	BuildCharMap(size)
 	return cb
+}
+
+func BuildCharMap(size int) {
+
+	CharMap = make(map[string]int, size)
+
+	for i := 0; i < size; i++ {
+		CharMap[ToChar(i)] = i
+	}
+
 }
 
 func ReadMove(args []string) ([]string, error) {
@@ -77,7 +86,7 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 		return false, errors.New(fmt.Sprintf("Invalid position %s", position))
 	}
 
-	if posIndex > cbLen {
+	if posIndex < 1 || posIndex > cbLen {
 		return false, errors.New(fmt.Sprintf("Invalid position %s, out of bound", position))
 	}
 
@@ -98,7 +107,7 @@ func PrintChessboard(Chessboard types.Chessboard) {
 		fmt.Print("|")
 
 		for j := (len(Chessboard) - 1); j >= 0; j-- {
-			fmt.Printf(" [%d][%d]:%s |", i, (len(Chessboard) - j - 1), ToChar(len(Chessboard)-j-1, i))
+			fmt.Printf(" [%d][%d]:%s%d |", i, (len(Chessboard) - j - 1), ToChar(len(Chessboard)-j-1), i+1)
 		}
 
 		fmt.Printf("\n%s", strings.Repeat("_", 12*len(Chessboard)))
@@ -111,8 +120,24 @@ func PrintChessboard(Chessboard types.Chessboard) {
 }
 
 func FindCoordinates(pos string) (int, int, error) {
+
 	if pos == "" {
 		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", pos))
 	}
-	return 0, 0, nil
+
+	posArray := strings.Split(pos, "")
+
+	y, ok := CharMap[posArray[0]]
+
+	if !ok {
+		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", posArray[0]))
+	}
+
+	x, err := strconv.Atoi(posArray[1])
+
+	if err != nil {
+		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", posArray[1]))
+	}
+
+	return x - 1, y, nil
 }
