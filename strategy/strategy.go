@@ -11,7 +11,7 @@ type FindPossibleMoves func(pos string) bool
 
 type Piece struct {
 	Name              string
-	FindPossibleMoves func(x int, y int)
+	FindPossibleMoves func(x int, y int) string
 	CurrentPos        string
 }
 
@@ -38,20 +38,20 @@ func GetPieceWithStrategy(pieceType string) (Piece, error) {
 	}
 }
 
-func PawnWalk() func(x int, y int) {
-	return func(x int, y int) {
-		fmt.Println(fmt.Sprintf("%s%d", util.ToChar(y), x+2))
+func PawnWalk() func(x int, y int) string {
+	return func(x int, y int) string {
+		return fmt.Sprintf(fmt.Sprintf("%s%d", util.ToChar(y), x+2))
 	}
 }
 
-func KingWalk() func(x int, y int) {
-	return func(x int, y int) {
-
+func KingWalk() func(x int, y int) string {
+	return func(x int, y int) string {
+		return fmt.Sprintf("")
 	}
 }
 
-func QueenWalk() func(x int, y int) {
-	return func(x int, y int) {
-
+func QueenWalk() func(x int, y int) string {
+	return func(x int, y int) string {
+		return fmt.Sprintf("")
 	}
 }

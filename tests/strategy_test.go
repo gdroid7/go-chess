@@ -34,3 +34,7 @@ func TestGetPieceStrategy(t *testing.T) {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be Piece & Strategy doesn't exist got nil"))
 	}
 }
+
+func TestPawnWalk(t *testing.T) {
+	strategy.PawnWalk()
+}
