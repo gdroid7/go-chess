@@ -2,6 +2,7 @@ package tests
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"example.com/t/util"
@@ -97,5 +98,15 @@ func TestFindCoordinatesTest(t *testing.T) {
 
 	if err == nil {
 		t.Fatal("TestFindCoordinatesTest failed, expected error got nil")
+	}
+
+	x, y, err := util.FindCoordinates("A1")
+
+	if err != nil {
+		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=1 y=0 , got error %s", err.Error()))
+	}
+
+	if x != 1 || y != 0 {
+		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=1 y=0, got  x=%d y=%d", x, y))
 	}
 }

@@ -111,6 +111,8 @@ func PrintChessboard(Chessboard types.Chessboard) {
 }
 
 func FindCoordinates(pos string) (int, int, error) {
-
+	if pos == "" {
+		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", pos))
+	}
 	return 0, 0, nil
 }
