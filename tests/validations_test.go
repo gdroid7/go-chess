@@ -4,57 +4,33 @@ import (
 	"errors"
 	"testing"
 
-	"example.com/t/types"
 	"example.com/t/util"
 )
 
-func TestReadCommandLineVars(t *testing.T) {
+func TestReadMove(t *testing.T) {
 
-	_, _, err := util.ReadMove([]string{})
-
-	if err == nil {
-		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("No input"), err.Error())
-	}
-
-	_, _, err = util.ReadMove([]string{"", ""})
+	_, err := util.ReadMove([]string{})
 
 	if err == nil {
 		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("No input"), err.Error())
 	}
 
-	_, _, err = util.ReadMove([]string{"A", "B"})
+	_, err = util.ReadMove([]string{"", ""})
+
+	if err == nil {
+		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("No input"), err.Error())
+	}
+
+	_, err = util.ReadMove([]string{"A", "B"})
 
 	if err == nil {
 		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("Invalid input"), err.Error())
 	}
 
-	_, _, err = util.ReadMove([]string{"Kind", "P1"})
+	_, err = util.ReadMove([]string{"Kind", "P1"})
 
 	if err != nil {
 		t.Fatalf("TestReadCommandLineVars failed,expected nil got %s", err.Error())
-	}
-}
-
-func TestValidateMove(t *testing.T) {
-
-	cb := types.Chessboard{{0, 0}, {0, 0}}
-
-	ok, err := util.ValidateMove(cb, "Bishop", "ZZ1")
-
-	if ok && err != nil {
-		t.Fatalf("TestValidateMove failed, expected status false got %t, error nil got %s", ok, err.Error())
-	}
-
-	ok, err = util.ValidateMove(cb, "Bishop", "A3")
-
-	if ok && err != nil {
-		t.Fatalf("TestValidateMove failed, expected status false got %t, error nil got %s", ok, err.Error())
-	}
-
-	ok, err = util.ValidateMove(cb, "King", "A2")
-
-	if !ok {
-		t.Fatalf("TestValidateMove failed, expected status true got %t, error nil got %s", ok, err.Error())
 	}
 }
 
@@ -78,4 +54,48 @@ func TestSanitizeInput(t *testing.T) {
 		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "B2", sanitizedInputs[3])
 	}
 
+}
+
+func TestValidateMove(t *testing.T) {
+
+	cbLen := 2
+
+	ok, err := util.ValidateMove("BI", "", cbLen)
+
+	if ok && err != nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	}
+
+	ok, err = util.ValidateMove("BI", "A1", cbLen)
+
+	if ok && err != nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	}
+
+	ok, err = util.ValidateMove("BISHOP", "ZZ1", cbLen)
+
+	if ok && err != nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	}
+
+	ok, err = util.ValidateMove("BISHOP", "A3", cbLen)
+
+	if ok && err != nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	}
+
+	ok, err = util.ValidateMove("KING", "A2", cbLen)
+
+	if !ok {
+		t.Fatalf("TestValidateMove failed, expected status true got %t, expected error nil got %s", ok, err.Error())
+	}
+}
+
+func TestFindCoordinatesTest(t *testing.T) {
+
+	_, _, err := util.FindCoordinates("")
+
+	if err == nil {
+		t.Fatal("TestFindCoordinatesTest failed, expected error got nil")
+	}
 }

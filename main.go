@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"example.com/t/types"
+	"example.com/t/strategy"
 
 	"example.com/t/util"
 )
 
-var Chessboard types.Chessboard
+var Chessboard [][]int
 
 func init() {
 	Chessboard = util.CreateEmptyChessboard(8)
@@ -18,18 +18,33 @@ func init() {
 
 func main() {
 
-	piece, pos, err := util.ReadMove(os.Args[1:])
+	args, err := util.ReadMove(os.Args[1:])
 
 	if err != nil {
 		fmt.Printf("Error : %s\n", err.Error())
 		return
 	}
 
-	if ok, err := util.ValidateMove(Chessboard, piece, pos); !ok {
+	args = util.SanitizeInputs(args)
+
+	if ok, err := util.ValidateMove(args[0], args[1], len(Chessboard)); !ok {
 		fmt.Printf("Error : %s\n", err.Error())
 		return
 	}
 
-	fmt.Println(piece, pos)
+	pieceType := args[0]
+
+	piece, err := strategy.GetPieceWithStrategy(pieceType)
+
+	if err != nil {
+		fmt.Println(fmt.Sprintf("Error finding specified piece %s", pieceType))
+	}
+
+	position := args[1]
+
+	_, _, err = util.FindCoordinates(position)
+
+	piece.FindPossibleMoves(1, 1)
+
 	return
 }
