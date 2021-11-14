@@ -17,7 +17,8 @@ func init() {
 }
 
 func main() {
-
+	//Read command line aruments except the first one
+	//which is file name
 	args, err := util.ReadMove(os.Args[1:])
 
 	if err != nil {
@@ -44,7 +45,7 @@ func main() {
 
 	x, y, err := util.FindCoordinates(position)
 
-	piece.FindPossibleMoves(x, y)
+	piece.FindPossibleMoves(Chessboard, x, y)
 
 	return
 }

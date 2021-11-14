@@ -13,7 +13,7 @@ func ToChar(i int) string {
 func SanitizeInputs(arr []string) []string {
 	var sanitized []string
 	for _, v := range arr {
-		sanitized = append(sanitized, strings.ToUpper(v))
+		sanitized = append(sanitized, strings.Trim(strings.ToUpper(v), ","))
 	}
 	return sanitized
 }

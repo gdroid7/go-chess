@@ -51,9 +51,6 @@ func ReadMove(args []string) ([]string, error) {
 		return args, errors.New("Not enough arguments")
 	}
 
-	args[0] = strings.Trim(args[0], ",")
-	args[1] = strings.Trim(args[1], ",")
-
 	if len(args[0]) < constants.MIN_CHAR_LEN_OF_PIECE || len(args[1]) < 2 {
 		return args, errors.New("Invalid input")
 	}
@@ -96,7 +93,7 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 	return true, nil
 }
 
-func PrintChessboard(Chessboard types.Chessboard) {
+func PrintChessboard(Chessboard types.Chessboard) bool {
 
 	fmt.Print("\n------BOARD------\n\n")
 
@@ -117,6 +114,7 @@ func PrintChessboard(Chessboard types.Chessboard) {
 		}
 	}
 	fmt.Print("\n\n")
+	return true
 }
 
 func FindCoordinates(pos string) (int, int, error) {
