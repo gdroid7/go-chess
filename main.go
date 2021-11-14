@@ -47,7 +47,7 @@ func main() {
 
 	x, y, err := util.FindCoordinates(position)
 
-	fmt.Println(piece.FindPossibleMoves(Chessboard, x, y))
+	fmt.Printf("Possible moves : %s\n", piece.FindPossibleMoves(Chessboard, x, y))
 
 	return
 }
