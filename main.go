@@ -27,24 +27,22 @@ func main() {
 	}
 
 	//Capitalise ,Trim inputs
-	args = util.SanitizeInputs(args)
+	pieceType, position := util.SanitizeInputs(args)
 
 	//Check for out of bound moves invalid pieces
-	if ok, err := util.ValidateMove(args[0], args[1], len(Chessboard)); !ok {
+	if ok, err := util.ValidateMove(pieceType, position, len(Chessboard)); !ok {
 		fmt.Printf("Error : %s\n", err.Error())
 		return
 	}
 
-	pieceType := args[0]
-
+	//Get Piece sturct with moving strategy
 	piece, err := strategy.GetPieceWithStrategy(pieceType)
 
 	if err != nil {
 		fmt.Println(fmt.Sprintf("Error finding specified piece %s", pieceType))
 	}
 
-	position := args[1]
-
+	//Get coordinates from cell position
 	x, y, err := util.FindCoordinates(position)
 
 	fmt.Printf("Possible moves : %s\n", piece.FindPossibleMoves(Chessboard, x, y))

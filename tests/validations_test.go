@@ -13,22 +13,10 @@ func TestReadMove(t *testing.T) {
 	_, err := util.ReadMove([]string{})
 
 	if err == nil {
-		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("No input"), err.Error())
+		t.Fatalf("TestReadCommandLineVars failed,expected %s error got nil", errors.New("No input"))
 	}
 
-	_, err = util.ReadMove([]string{"", ""})
-
-	if err == nil {
-		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("No input"), err.Error())
-	}
-
-	_, err = util.ReadMove([]string{"A", "B"})
-
-	if err == nil {
-		t.Fatalf("TestReadCommandLineVars failed,expected %s error got %s", errors.New("Invalid input"), err.Error())
-	}
-
-	_, err = util.ReadMove([]string{"Kind", "P1"})
+	_, err = util.ReadMove([]string{"King", "P1"})
 
 	if err != nil {
 		t.Fatalf("TestReadCommandLineVars failed,expected nil got %s", err.Error())
@@ -37,22 +25,14 @@ func TestReadMove(t *testing.T) {
 
 func TestSanitizeInput(t *testing.T) {
 
-	sanitizedInputs := util.SanitizeInputs([]string{"kIng", "BISHOP", "a1", "B2"})
+	pType, pos := util.SanitizeInputs([]string{"kIng", "a1"})
 
-	if sanitizedInputs[0] != "KING" {
-		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "KING", sanitizedInputs[0])
+	if pType != "KING" {
+		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "KING", pType)
 	}
 
-	if sanitizedInputs[1] != "BISHOP" {
-		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "BISHOP", sanitizedInputs[1])
-	}
-
-	if sanitizedInputs[2] != "A1" {
-		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "a1", sanitizedInputs[2])
-	}
-
-	if sanitizedInputs[3] != "B2" {
-		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "B2", sanitizedInputs[3])
+	if pos != "A1" {
+		t.Fatalf("TestSanitizeInput failed, expected %s got %s", "A1", pos)
 	}
 
 }
@@ -61,22 +41,58 @@ func TestValidateMove(t *testing.T) {
 
 	cbLen := 2
 
-	ok, err := util.ValidateMove("BI", "", cbLen)
+	ok, err := util.ValidateMove("", "", cbLen)
 
-	if ok && err != nil {
-		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid piece BI got nil", ok)
 	}
 
-	ok, err = util.ValidateMove("KING", "A0", cbLen)
+	ok, err = util.ValidateMove("KI", "A0", cbLen)
 
-	if ok && err == nil {
-		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid piece KI got nil", ok)
 	}
 
-	ok, err = util.ValidateMove("BI", "A1", cbLen)
+	ok, err = util.ValidateMove("KING", "A", cbLen)
 
-	if ok && err != nil {
-		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid position A got nil", ok)
+	}
+
+	ok, err = util.ValidateMove("KING", "A11", cbLen)
+
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid position A got nil", ok)
+	}
+
+	ok, err = util.ValidateMove("KGNI", "A1", cbLen)
+
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid1 piece KNIN got nil", ok)
+	}
+
+	ok, err = util.ValidateMove("123", "123", cbLen)
+
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid input format 123 123, got nil", ok)
+	}
+
+	ok, err = util.ValidateMove("BISHOP", "A1", cbLen)
+
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid piece BISHOP, got nil", ok)
+	}
+
+	ok, err = util.ValidateMove("QUEEN", "AA", cbLen)
+
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error Invalid position \"AA\" got nil", ok)
+	}
+
+	ok, err = util.ValidateMove("QUEEN", "A0", cbLen)
+
+	if err == nil {
+		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error Invalid position \"A99\" got nil", ok)
 	}
 
 	ok, err = util.ValidateMove("BISHOP", "ZZ1", cbLen)
@@ -96,6 +112,7 @@ func TestValidateMove(t *testing.T) {
 	if !ok {
 		t.Fatalf("TestValidateMove failed, expected status true got %t, expected error nil got %s", ok, err.Error())
 	}
+
 }
 
 func TestFindCoordinatesTest(t *testing.T) {
@@ -114,5 +131,11 @@ func TestFindCoordinatesTest(t *testing.T) {
 
 	if x != 0 || y != 0 {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=0 y=0, got  x=%d y=%d", x, y))
+	}
+
+	x, y, err = util.FindCoordinates("Z1")
+
+	if err == nil {
+		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected error, got nil"))
 	}
 }

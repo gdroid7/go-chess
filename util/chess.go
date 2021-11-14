@@ -3,7 +3,6 @@ package util
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"strconv"
 	"strings"
 
@@ -11,8 +10,6 @@ import (
 	"example.com/t/types"
 )
 
-var MIN_POSITION_LEN = 2
-var MAX_POSITION_LEN = 2
 var CharMap map[string]int
 
 func CreateEmptyChessboard(size int) [][]int {
@@ -51,44 +48,38 @@ func ReadMove(args []string) ([]string, error) {
 		return args, errors.New("Not enough arguments")
 	}
 
-	if len(args[0]) < constants.MIN_CHAR_LEN_OF_PIECE || len(args[1]) < 2 {
-		return args, errors.New("Invalid input")
-	}
-
-	arg1Kind, arg2Kind := reflect.TypeOf(args[0]).Kind(), reflect.TypeOf(args[1]).Kind()
-
-	if arg1Kind != reflect.String && arg2Kind != reflect.String {
-		return args, errors.New("Invalid input")
-	}
-
 	return args, nil
 }
 
 func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 
-	if s := strings.Join(constants.PIECES, ""); !strings.Contains(s, pieceType) {
-		return false, errors.New(fmt.Sprintf("Invalid piece \"%s\"", pieceType))
+	if len(pieceType) < constants.MIN_CHAR_LEN_OF_PIECE || len(pieceType) > constants.MAX_CHAR_LEN_OF_PIECE {
+		return false, errors.New(fmt.Sprintf("Invalid piece %s", pieceType))
 	}
 
-	if len(position) < MIN_POSITION_LEN || len(position) > MAX_POSITION_LEN {
+	if len(position) < constants.MIN_MAX_POSITION_LEN || len(position) > constants.MIN_MAX_POSITION_LEN {
 		return false, errors.New(fmt.Sprintf("Invalid position %s", position))
+	}
+
+	// arg1Kind, arg2Kind := reflect.TypeOf(pieceType).Kind(), reflect.TypeOf(position).Kind()
+
+	// if arg1Kind != reflect.String && arg2Kind != reflect.String {
+	// 	return false, errors.New(fmt.Sprintf("Invalid input format %v %v", pieceType, position))
+	// }
+
+	//Can replace with a map search for piece name
+	if s := strings.Join(constants.PIECES, ""); !strings.Contains(s, pieceType) {
+		return false, errors.New(fmt.Sprintf("Invalid piece \"%s\"", pieceType))
 	}
 
 	//Only get first 2 characters : max possibility
 	posArray := strings.Split(position, "")
 
-	posIndex, err := strconv.Atoi(posArray[1])
-
-	if err != nil {
-		return false, errors.New(fmt.Sprintf("Invalid position %s", position))
+	if posIndex, err := strconv.Atoi(posArray[1]); err != nil {
+		return false, errors.New(fmt.Sprintf("Invalid position \"%s\"", position))
+	} else if posIndex < 1 || posIndex > cbLen {
+		return false, errors.New(fmt.Sprintf("Invalid position \"%s\", out of bound", position))
 	}
-
-	if posIndex < 1 || posIndex > cbLen {
-		return false, errors.New(fmt.Sprintf("Invalid position %s, out of bound", position))
-	}
-
-	//TODO
-	//HANDLE Alphabets as columns
 
 	return true, nil
 }
@@ -134,6 +125,6 @@ func FindCoordinates(pos string) (int, int, error) {
 	if err != nil {
 		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", posArray[1]))
 	}
-
+	//x-1 to map cell numbers to indices
 	return x - 1, y, nil
 }

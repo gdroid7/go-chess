@@ -10,10 +10,6 @@ func ToChar(i int) string {
 	return fmt.Sprintf("%s", string('A'+i))
 }
 
-func SanitizeInputs(arr []string) []string {
-	var sanitized []string
-	for _, v := range arr {
-		sanitized = append(sanitized, strings.Trim(strings.ToUpper(v), ","))
-	}
-	return sanitized
+func SanitizeInputs(arr []string) (string, string) {
+	return strings.Trim(strings.ToUpper(arr[0]), ","), strings.Trim(strings.ToUpper(arr[1]), ",")
 }
