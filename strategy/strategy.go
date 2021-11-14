@@ -145,7 +145,6 @@ func QueenWalk() func(cb [][]int, x int, y int) string {
 			moves = append(moves, []int{x - i, y})
 
 		}
-
 		return CoordinatesForHumans(moves)
 	}
 }
@@ -154,7 +153,7 @@ func CoordinatesForHumans(moves [][]int) string {
 
 	var result string
 	for i := 0; i < len(moves); i++ {
-		result += fmt.Sprintf("%s%d, ", string('A'+moves[i][1]), moves[i][0]+1)
+		result += fmt.Sprintf("%s%d, ", util.ToChar(moves[i][1]), moves[i][0]+1)
 	}
 	return strings.TrimRight(result, ", ")
 }

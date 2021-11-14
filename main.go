@@ -26,8 +26,10 @@ func main() {
 		return
 	}
 
+	//Capitalise ,Trim inputs
 	args = util.SanitizeInputs(args)
 
+	//Check for out of bound moves invalid pieces
 	if ok, err := util.ValidateMove(args[0], args[1], len(Chessboard)); !ok {
 		fmt.Printf("Error : %s\n", err.Error())
 		return

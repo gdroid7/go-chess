@@ -70,7 +70,7 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 		return false, errors.New(fmt.Sprintf("Invalid piece \"%s\"", pieceType))
 	}
 
-	if len(position) < MIN_POSITION_LEN && len(position) > MAX_POSITION_LEN {
+	if len(position) < MIN_POSITION_LEN || len(position) > MAX_POSITION_LEN {
 		return false, errors.New(fmt.Sprintf("Invalid position %s", position))
 	}
 
@@ -94,8 +94,6 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 }
 
 func PrintChessboard(Chessboard types.Chessboard) bool {
-
-	fmt.Print("\n------BOARD------\n\n")
 
 	fmt.Println(strings.Repeat("_", 12*len(Chessboard)))
 
