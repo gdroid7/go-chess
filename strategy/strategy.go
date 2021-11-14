@@ -3,6 +3,7 @@ package strategy
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"example.com/t/util"
 )
@@ -46,61 +47,114 @@ func PawnWalk() func(cb [][]int, x int, y int) string {
 
 func KingWalk() func(cb [][]int, x int, y int) string {
 	return func(cb [][]int, x int, y int) string {
-
-		xMove := []int{-1, 0, 1, 1, 1, 0, -1, -1}
-		yMove := []int{-1, -1, -1, 0, 1, 1, 1, 0}
+		moves := [][]int{}
+		xMove := []int{0, 1, 1, 1, 0, -1, -1, -1}
+		yMove := []int{-1, -1, 0, 1, 1, 1, 0, -1}
 
 		for i := 0; i < 8; i++ {
 
-			// fmt.Printf("i:%d,x:%d,y:%d,xMove[i]:%d x+(xMove[i])) : %d, y+(yMove[i]) : %d \n", i, x, y, xMove[i], x+(xMove[i]), (y + (yMove[i])))
-
-			if (x+(xMove[i])) >= 0 && (x+(xMove[i])) <= 8 && (y+(yMove[i])) >= 0 && (y+(xMove[i])) <= 8 {
-				fmt.Println(util.ToChar(y+(yMove[i])), x+(xMove[i])+1)
+			if (x+(xMove[i])) >= 0 && (x+(xMove[i])) < 8 && y+(yMove[i]) >= 0 && y+(yMove[i]) < 8 {
+				moves = append(moves, []int{x + (xMove[i]), y + (yMove[i])})
 			}
+
+			// if y > 0 && y <= 8 {
+
+			// 	fmt.Println(x-1, y-1)
+			// 	fmt.Println(x, y-1)
+			// 	fmt.Println(x+1, y-1)
+			// 	fmt.Println(x+1, y)
+
+			// 	if y < (8-1) && y < 7 {
+			// 		fmt.Println(x+1, y+1)
+			// 		fmt.Println(x, y+1)
+			// 		fmt.Println(x-1, y+1)
+			// 		fmt.Println(x-1, y)
+			// 		break
+			// 	}
+			// 	break
+			// }
+
 		}
 
-		return fmt.Sprintf("%d,%d", x, y)
+		return CoordinatesForHumans(moves)
 	}
 }
 
 func QueenWalk() func(cb [][]int, x int, y int) string {
 	return func(cb [][]int, x int, y int) string {
 
-		//LEFT HORIZ
-		for i := (y - 1); i >= 0; i-- {
-			// fmt.Println(x, i)
+		moves := [][]int{}
+		// //LEFT HORIZ 1
+		// for i := x + 1; i <= y; i++ {
+		// 	fmt.Println(i, y-i)
+		// }
+
+		//LEFT HORIZ 1
+		for i := 1; i <= y; i++ {
+			// fmt.Println(x, y-i)
+			moves = append(moves, []int{x, y - i})
+			// fmt.Println(CoordinatesForHumans(x, y-i))
 		}
 
 		//LEFT TOP DIAG
 		for i := 1; i <= y; i++ {
 			// fmt.Println(x+i, y-i)
+			// fmt.Println(CoordinatesForHumans(x+i, y-i))
+			moves = append(moves, []int{x + i, y - i})
+
 		}
 
 		//TOP
-		for i := 1; i <= y; i++ {
+		//iterate for max len - current pos
+		for i := 1; i <= len(cb)-(x+1); i++ {
 			// fmt.Println(x+i, y)
+			// fmt.Println(CoordinatesForHumans(x+i, y))
+			moves = append(moves, []int{x + i, y})
+
+		}
+
+		//RIGHT TOP DIAG
+		//iterate until y and add 1 to x and y every iteration
+		for i := 1; i <= y; i++ {
+			// fmt.Println(x+i, y+i)
+			// fmt.Println(CoordinatesForHumans(x+i, y+i))
+			moves = append(moves, []int{x + i, y + i})
+
 		}
 
 		//RIGHT HORIZ
 		for i := 1; i <= x; i++ {
 			// fmt.Println(x, y+i)
-		}
+			// fmt.Println(CoordinatesForHumans(x, y+i))
+			moves = append(moves, []int{x, y + i})
 
-		//RIGHT TOP DIAG
-		for i := 1; i <= x; i++ {
-			// fmt.Println(x+i, y+i)
 		}
 
 		//RIGHT DOWN HORIZ
 		for i := 1; i <= x; i++ {
 			// fmt.Println(x-i, y+i)
+			// fmt.Println(CoordinatesForHumans(x-i, y+i))
+			moves = append(moves, []int{x - i, y + i})
+
 		}
 
 		//DOWN
 		for i := 1; i <= x; i++ {
-			fmt.Println(x-i, y)
+			// fmt.Println(x-i, y)
+			// fmt.Println(CoordinatesForHumans(x-i, y))
+			moves = append(moves, []int{x - i, y})
+
 		}
 
-		return fmt.Sprintf("%d,%d", x, y)
+		return CoordinatesForHumans(moves)
 	}
+}
+
+func CoordinatesForHumans(moves [][]int) string {
+
+	var result string
+	for i := 0; i < len(moves); i++ {
+		result += fmt.Sprintf("%s%d, ", string('A'+moves[i][1]), moves[i][0]+1)
+	}
+	return strings.TrimRight(result, ", ")
 }
