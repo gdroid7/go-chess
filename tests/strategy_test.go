@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"example.com/t/strategy"
+	"example.com/t/util"
 )
 
 func TestGetPieceStrategy(t *testing.T) {
@@ -36,5 +37,20 @@ func TestGetPieceStrategy(t *testing.T) {
 }
 
 func TestPawnWalk(t *testing.T) {
-	strategy.PawnWalk()
+
+	piece := strategy.Piece{
+		Name:              "PAWN",
+		FindPossibleMoves: strategy.PawnWalk(),
+	}
+
+	if piece.Name != "PAWN" {
+		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected name to be PAWN, got %s", piece.Name))
+	}
+
+	cb := util.CreateEmptyChessboard(8)
+	result := piece.FindPossibleMoves(cb, 1, 2)
+
+	if result != "C3" {
+		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected C3, got %s", result))
+	}
 }

@@ -13,7 +13,6 @@ type FindPossibleMoves func(pos string) bool
 type Piece struct {
 	Name              string
 	FindPossibleMoves func(cb [][]int, x int, y int) string
-	CurrentPos        string
 }
 
 func GetPieceWithStrategy(pieceType string) (Piece, error) {
