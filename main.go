@@ -45,6 +45,8 @@ func main() {
 	//Get coordinates from cell position
 	x, y, err := util.FindCoordinates(position)
 
+	fmt.Printf("Input : %s %s\n", pieceType, position)
+
 	fmt.Printf("Possible moves : %s\n", piece.FindPossibleMoves(Chessboard, x, y))
 
 	return
