@@ -10,8 +10,6 @@ import (
 	"example.com/t/types"
 )
 
-var CharMap map[string]int
-
 func CreateEmptyChessboard(size int) [][]int {
 
 	if size < 1 {
@@ -28,18 +26,8 @@ func CreateEmptyChessboard(size int) [][]int {
 			cb[v] = append(cb[v], 0)
 		}
 	}
-	BuildCharMap(size)
+
 	return cb
-}
-
-func BuildCharMap(size int) {
-
-	CharMap = make(map[string]int, size)
-
-	for i := 0; i < size; i++ {
-		CharMap[ToChar(i)] = i
-	}
-
 }
 
 func ReadMove(args []string) ([]string, error) {
@@ -108,17 +96,13 @@ func PrintChessboard(Chessboard types.Chessboard) bool {
 
 func FindCoordinates(pos string) (int, int, error) {
 
-	if pos == "" {
+	if len(pos) != constants.MIN_MAX_POSITION_LEN {
 		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", pos))
 	}
 
 	posArray := strings.Split(pos, "")
 
-	y, ok := CharMap[posArray[0]]
-
-	if !ok {
-		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", posArray[0]))
-	}
+	y := ToInt(byte(posArray[0][0]))
 
 	x, err := strconv.Atoi(posArray[1])
 
