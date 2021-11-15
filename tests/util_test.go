@@ -48,3 +48,9 @@ func TestFindCoordinatesTest(t *testing.T) {
 	}
 
 }
+
+func TestPrintChessboard(t *testing.T) {
+	if ok := util.PrintChessboard(8); !ok {
+		t.Fatal("TestPrintChessboard failed, expected true, got false")
+	}
+}

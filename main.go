@@ -13,7 +13,7 @@ var Chessboard [][]int
 
 func init() {
 	Chessboard = util.CreateEmptyChessboard(8)
-	util.PrintChessboard(Chessboard)
+	util.PrintChessboard(len(Chessboard))
 }
 
 func main() {

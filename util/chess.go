@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"example.com/t/constants"
-	"example.com/t/types"
 )
 
 func CreateEmptyChessboard(size int) [][]int {
@@ -72,19 +71,19 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 	return true, nil
 }
 
-func PrintChessboard(Chessboard types.Chessboard) bool {
+func PrintChessboard(size int) bool {
 
-	fmt.Println(strings.Repeat("_", 12*len(Chessboard)))
+	fmt.Println(strings.Repeat("_", 12*size))
 
-	for i := (len(Chessboard) - 1); i >= 0; i-- {
+	for i := (size - 1); i >= 0; i-- {
 
 		fmt.Print("|")
 
-		for j := (len(Chessboard) - 1); j >= 0; j-- {
-			fmt.Printf(" [%d][%d]:%s%d |", i, (len(Chessboard) - j - 1), ToChar(len(Chessboard)-j-1), i+1)
+		for j := (size - 1); j >= 0; j-- {
+			fmt.Printf(" [%d][%d]:%s%d |", i, (size - j - 1), ToChar(size-j-1), i+1)
 		}
 
-		fmt.Printf("\n%s", strings.Repeat("_", 12*len(Chessboard)))
+		fmt.Printf("\n%s", strings.Repeat("_", 12*size))
 
 		if i != 0 {
 			fmt.Println()
