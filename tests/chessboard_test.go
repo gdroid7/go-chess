@@ -1,23 +1,17 @@
 package tests
 
-import (
-	"testing"
+// func TestCreateChessboard(t *testing.T) {
 
-	"example.com/t/util"
-)
+// 	cb := util.CreateEmptyChessboard(0)
 
-func TestCreateChessboard(t *testing.T) {
+// 	if len(cb) > 0 {
+// 		t.Fatalf("CreateChessboard failed,expected cb to be nil got %v", cb)
+// 	}
 
-	cb := util.CreateEmptyChessboard(0)
+// 	size := 2
+// 	cb = util.CreateEmptyChessboard(size)
 
-	if len(cb) > 0 {
-		t.Fatalf("CreateChessboard failed,expected cb to be nil got %v", cb)
-	}
-
-	size := 2
-	cb = util.CreateEmptyChessboard(size)
-
-	if len(cb) != size {
-		t.Fatalf("CreateChessboard failed,expected chessboard of size %dx%d got %dx%d", size, size, len(cb), len(cb))
-	}
-}
+// 	if len(cb) != size {
+// 		t.Fatalf("CreateChessboard failed,expected chessboard of size %dx%d got %dx%d", size, size, len(cb), len(cb))
+// 	}
+// }

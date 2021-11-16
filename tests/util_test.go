@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"example.com/t/chess"
 	"example.com/t/util"
 )
 
@@ -15,13 +16,13 @@ func TestToInt(t *testing.T) {
 
 func TestFindCoordinatesTest(t *testing.T) {
 
-	_, _, err := util.FindCoordinates("")
+	_, _, err := chess.FindCoordinates("")
 
 	if err == nil {
 		t.Fatal("TestFindCoordinatesTest failed, expected error got nil")
 	}
 
-	x, y, err := util.FindCoordinates("A1")
+	x, y, err := chess.FindCoordinates("A1")
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=1 y=0 , got error %s", err.Error()))
@@ -31,7 +32,7 @@ func TestFindCoordinatesTest(t *testing.T) {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected result x=0 y=0, got  x=%d y=%d", x, y))
 	}
 
-	x, y, err = util.FindCoordinates("Z1")
+	x, y, err = chess.FindCoordinates("Z1")
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected error nil, got error %s ", err))
@@ -41,7 +42,7 @@ func TestFindCoordinatesTest(t *testing.T) {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected x=0,y=25, got x=%d y=%d ", x, y))
 	}
 
-	x, y, err = util.FindCoordinates("AA")
+	x, y, err = chess.FindCoordinates("AA")
 
 	if err == nil {
 		t.Fatal(fmt.Sprintf("TestFindCoordinatesTest failed, expected error, got nil"))
@@ -50,7 +51,7 @@ func TestFindCoordinatesTest(t *testing.T) {
 }
 
 func TestPrintChessboard(t *testing.T) {
-	if ok := util.PrintChessboard(8); !ok {
+	if ok := chess.PrintChessboard(8); !ok {
 		t.Fatal("TestPrintChessboard failed, expected true, got false")
 	}
 }

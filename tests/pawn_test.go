@@ -5,12 +5,9 @@ import (
 	"testing"
 
 	"example.com/t/strategy"
-	"example.com/t/util"
 )
 
 func TestPawnWalk(t *testing.T) {
-
-	var Chessboard = util.CreateEmptyChessboard(8)
 
 	pieceType := "PAWN"
 
@@ -25,7 +22,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y := 0, 0
 	moves := "A2"
-	result := piece.FindPossibleMoves(Chessboard, x, y)
+	result := piece.FindPossibleMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -33,7 +30,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 7, 7
 	moves = ""
-	result = piece.FindPossibleMoves(Chessboard, x, y)
+	result = piece.FindPossibleMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -41,7 +38,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 0, 7
 	moves = "H2"
-	result = piece.FindPossibleMoves(Chessboard, x, y)
+	result = piece.FindPossibleMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -49,7 +46,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 0, 3
 	moves = "D2"
-	result = piece.FindPossibleMoves(Chessboard, x, y)
+	result = piece.FindPossibleMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -57,7 +54,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 7, 0
 	moves = ""
-	result = piece.FindPossibleMoves(Chessboard, x, y)
+	result = piece.FindPossibleMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -65,7 +62,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 7, 4
 	moves = ""
-	result = piece.FindPossibleMoves(Chessboard, x, y)
+	result = piece.FindPossibleMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))

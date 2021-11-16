@@ -1,4 +1,4 @@
-package util
+package chess
 
 import (
 	"errors"
@@ -7,27 +7,28 @@ import (
 	"strings"
 
 	"example.com/t/constants"
+	"example.com/t/util"
 )
 
-func CreateEmptyChessboard(size int) [][]int {
+// func CreateEmptyChessboard(size int) [][]int {
 
-	if size < 1 {
-		return nil
-	}
+// 	if size < 1 {
+// 		return nil
+// 	}
 
-	cb := make([][]int, size)
-	//create empty chess board with size r x c
-	//initialise with cell names and int value to represent availibility (future)
-	for v := range cb {
-		//initialise map of key : value (A1:0)
-		//iterate over num of c
-		for i := 0; i < size; i++ {
-			cb[v] = append(cb[v], 0)
-		}
-	}
+// 	cb := make([][]int, size)
+// 	//create empty chess board with size r x c
+// 	//initialise with cell names and int value to represent availibility (future)
+// 	for v := range cb {
+// 		//initialise map of key : value (A1:0)
+// 		//iterate over num of c
+// 		for i := 0; i < size; i++ {
+// 			cb[v] = append(cb[v], 0)
+// 		}
+// 	}
 
-	return cb
-}
+// 	return cb
+// }
 
 func ReadMove(args []string) ([]string, error) {
 
@@ -48,12 +49,6 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 		return false, errors.New(fmt.Sprintf("Invalid position %s", position))
 	}
 
-	// arg1Kind, arg2Kind := reflect.TypeOf(pieceType).Kind(), reflect.TypeOf(position).Kind()
-
-	// if arg1Kind != reflect.String && arg2Kind != reflect.String {
-	// 	return false, errors.New(fmt.Sprintf("Invalid input format %v %v", pieceType, position))
-	// }
-
 	//Can replace with a map search for piece name
 	if s := strings.Join(constants.PIECES, ""); !strings.Contains(s, pieceType) {
 		return false, errors.New(fmt.Sprintf("Invalid piece \"%s\"", pieceType))
@@ -71,6 +66,8 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 	return true, nil
 }
 
+//Print a chessboard on cli with coordinates and cell names
+//for reference
 func PrintChessboard(size int) bool {
 
 	fmt.Println(strings.Repeat("_", 12*size))
@@ -80,7 +77,7 @@ func PrintChessboard(size int) bool {
 		fmt.Print("|")
 
 		for j := (size - 1); j >= 0; j-- {
-			fmt.Printf(" [%d][%d]:%s%d |", i, (size - j - 1), ToChar(size-j-1), i+1)
+			fmt.Printf(" [%d][%d]:%s%d |", i, (size - j - 1), util.ToChar(size-j-1), i+1)
 		}
 
 		fmt.Printf("\n%s", strings.Repeat("_", 12*size))
@@ -101,7 +98,7 @@ func FindCoordinates(pos string) (int, int, error) {
 
 	posArray := strings.Split(pos, "")
 
-	y := ToInt(byte(posArray[0][0]))
+	y := util.ToInt(byte(posArray[0][0]))
 
 	x, err := strconv.Atoi(posArray[1])
 
