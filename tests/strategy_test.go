@@ -4,20 +4,20 @@ import (
 	"fmt"
 	"testing"
 
-	"example.com/t/strategy"
+	"example.com/t/chess"
 )
 
 func TestGetPieceWithStrategy(t *testing.T) {
 
 	pieceTye := ""
-	_, err := strategy.GetPieceWithStrategy(pieceTye)
+	_, err := chess.GetPieceWithStrategy(pieceTye)
 
 	if err == nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error got %s", err))
 	}
 
 	pieceTye = "PAWN"
-	piece, err := strategy.GetPieceWithStrategy(pieceTye)
+	piece, err := chess.GetPieceWithStrategy(pieceTye)
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be nil got %T", err))
@@ -28,7 +28,7 @@ func TestGetPieceWithStrategy(t *testing.T) {
 	}
 
 	pieceTye = "KING"
-	piece, err = strategy.GetPieceWithStrategy(pieceTye)
+	piece, err = chess.GetPieceWithStrategy(pieceTye)
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be nil got %T", err))
@@ -39,7 +39,7 @@ func TestGetPieceWithStrategy(t *testing.T) {
 	}
 
 	pieceTye = "QUEEN"
-	piece, err = strategy.GetPieceWithStrategy(pieceTye)
+	piece, err = chess.GetPieceWithStrategy(pieceTye)
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be nil got %T", err))
@@ -50,9 +50,9 @@ func TestGetPieceWithStrategy(t *testing.T) {
 	}
 
 	pieceTye = "BISHOP"
-	piece, err = strategy.GetPieceWithStrategy(pieceTye)
+	piece, err = chess.GetPieceWithStrategy(pieceTye)
 
-	if piece.Name != "" || err == nil {
+	if piece != nil || err == nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be Piece & Strategy doesn't exist got nil"))
 	}
 }

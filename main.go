@@ -7,20 +7,21 @@ import (
 	"os"
 
 	"example.com/t/chess"
-	"example.com/t/strategy"
 	"example.com/t/util"
 )
 
-var chessboard [8][8]int
+var size = 8
+var chessboard [][]int
 
 func main() {
+	chessboard = make([][]int, size)
 	//Print chessboad for reference
-	chess.PrintChessboard(len(chessboard))
+	chess.PrintChessboard(size)
 	//Run program
 	run(chessboard)
 }
 
-func run(cb [8][8]int) {
+func run(cb [][]int) {
 
 	pieceType, position, err := handleInput()
 
@@ -30,7 +31,7 @@ func run(cb [8][8]int) {
 	}
 
 	//Get Piece sturct with moving strategy
-	piece, err := strategy.GetPieceWithStrategy(pieceType)
+	piece, err := chess.GetPieceWithStrategy(pieceType)
 
 	if err != nil {
 		log.Fatal(err)
@@ -38,11 +39,11 @@ func run(cb [8][8]int) {
 	}
 
 	//Get coordinates from cell position
-	x, y, err := chess.FindCoordinates(position)
+	x, y, err := chess.GetCurrCoordinates(position)
 
 	//Print ioutput
 	fmt.Printf("Input : %s %s\n", pieceType, position)
-	fmt.Printf("Possible moves : %s\n", piece.FindPossibleMoves(cb, x, y))
+	fmt.Printf("Possible moves : %s\n", piece.GetMoves(cb, x, y))
 
 	return
 }
@@ -63,7 +64,7 @@ func handleInput() (string, string, error) {
 	pieceType, position = util.SanitizeInputs(args)
 
 	//Check for out of bound moves invalid pieces
-	if ok, err := chess.ValidateMove(pieceType, position, len(chessboard)); !ok {
+	if ok, err := chess.ValidateMove(pieceType, position, size); !ok {
 		return pieceType, position, errors.New(fmt.Sprintf("Error : %s\n", err.Error()))
 	}
 

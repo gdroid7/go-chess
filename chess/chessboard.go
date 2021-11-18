@@ -10,26 +10,6 @@ import (
 	"example.com/t/util"
 )
 
-// func CreateEmptyChessboard(size int) [][]int {
-
-// 	if size < 1 {
-// 		return nil
-// 	}
-
-// 	cb := make([][]int, size)
-// 	//create empty chess board with size r x c
-// 	//initialise with cell names and int value to represent availibility (future)
-// 	for v := range cb {
-// 		//initialise map of key : value (A1:0)
-// 		//iterate over num of c
-// 		for i := 0; i < size; i++ {
-// 			cb[v] = append(cb[v], 0)
-// 		}
-// 	}
-
-// 	return cb
-// }
-
 func ReadMove(args []string) ([]string, error) {
 
 	if len(args) < 2 {
@@ -90,7 +70,7 @@ func PrintChessboard(size int) bool {
 	return true
 }
 
-func FindCoordinates(pos string) (int, int, error) {
+func GetCurrCoordinates(pos string) (int, int, error) {
 
 	if len(pos) != constants.MIN_MAX_POSITION_LEN {
 		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", pos))
@@ -107,4 +87,17 @@ func FindCoordinates(pos string) (int, int, error) {
 	}
 	//x-1 to map cell numbers to indices
 	return x - 1, y, nil
+}
+
+func GetPieceWithStrategy(pieceType string) (*Piece, error) {
+	switch pieceType {
+	case "PAWN":
+		return NewPiece(pieceType, Pawn{}), nil
+	case "KING":
+		return NewPiece(pieceType, King{}), nil
+	case "QUEEN":
+		return NewPiece(pieceType, Queen{}), nil
+	default:
+		return nil, errors.New("Invalid piece")
+	}
 }

@@ -4,17 +4,14 @@ import (
 	"fmt"
 	"testing"
 
-	"example.com/t/strategy"
+	"example.com/t/chess"
 )
 
 func TestPawnWalk(t *testing.T) {
 
 	pieceType := "PAWN"
 
-	piece := strategy.Piece{
-		Name:              pieceType,
-		FindPossibleMoves: strategy.PawnWalk(),
-	}
+	piece := chess.NewPiece(pieceType, chess.Pawn{})
 
 	if piece.Name != pieceType {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected name to be %s, got %s", pieceType, piece.Name))
@@ -22,15 +19,15 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y := 0, 0
 	moves := "A2"
-	result := piece.FindPossibleMoves(chessboard, x, y)
-
+	result := piece.GetMoves(chessboard, x, y)
+	fmt.Println(x, y)
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
 	}
 
 	x, y = 7, 7
 	moves = ""
-	result = piece.FindPossibleMoves(chessboard, x, y)
+	result = piece.GetMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -38,7 +35,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 0, 7
 	moves = "H2"
-	result = piece.FindPossibleMoves(chessboard, x, y)
+	result = piece.GetMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -46,7 +43,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 0, 3
 	moves = "D2"
-	result = piece.FindPossibleMoves(chessboard, x, y)
+	result = piece.GetMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -54,7 +51,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 7, 0
 	moves = ""
-	result = piece.FindPossibleMoves(chessboard, x, y)
+	result = piece.GetMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
@@ -62,7 +59,7 @@ func TestPawnWalk(t *testing.T) {
 
 	x, y = 7, 4
 	moves = ""
-	result = piece.FindPossibleMoves(chessboard, x, y)
+	result = piece.GetMoves(chessboard, x, y)
 
 	if result != moves {
 		t.Fatal(fmt.Sprintf("TestPawnWalk failed, expected %s, got %s", moves, result))
