@@ -18,11 +18,3 @@ func ToInt(c byte) int {
 func SanitizeInputs(arr []string) (string, string) {
 	return strings.Trim(strings.ToUpper(arr[0]), ","), strings.Trim(strings.ToUpper(arr[1]), ",")
 }
-
-func CoordinatesForHumans(moves [][]int) string {
-	var result string
-	for i := 0; i < len(moves); i++ {
-		result += fmt.Sprintf("%s%d,", ToChar(moves[i][1]), moves[i][0]+1)
-	}
-	return strings.TrimRight(result, ",")
-}

@@ -3,14 +3,30 @@ package chess
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
-	"example.com/t/constants"
 	"example.com/t/util"
 )
 
-func ReadMove(args []string) ([]string, error) {
+const (
+	MIN_CHAR_LEN_OF_PIECE = 4
+	MAX_CHAR_LEN_OF_PIECE = 5
+	MIN_MAX_POSITION_LEN  = 2
+)
+
+var PIECES = []string{"KING", "PAWN", "QUEEN"}
+
+type Chessboard struct {
+	Size int
+}
+
+func NewChessboard(size int) *Chessboard {
+	return &Chessboard{Size: size}
+}
+
+func (cb Chessboard) ReadMove(args []string) ([]string, error) {
 
 	if len(args) < 2 {
 		return args, errors.New("Not enough arguments")
@@ -19,18 +35,18 @@ func ReadMove(args []string) ([]string, error) {
 	return args, nil
 }
 
-func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
+func (cb Chessboard) ValidateMove(pieceType string, position string) (bool, error) {
 
-	if len(pieceType) < constants.MIN_CHAR_LEN_OF_PIECE || len(pieceType) > constants.MAX_CHAR_LEN_OF_PIECE {
+	if len(pieceType) < MIN_CHAR_LEN_OF_PIECE || len(pieceType) > MAX_CHAR_LEN_OF_PIECE {
 		return false, errors.New(fmt.Sprintf("Invalid piece %s", pieceType))
 	}
 
-	if len(position) < constants.MIN_MAX_POSITION_LEN || len(position) > constants.MIN_MAX_POSITION_LEN {
+	if len(position) < MIN_MAX_POSITION_LEN || len(position) > MIN_MAX_POSITION_LEN {
 		return false, errors.New(fmt.Sprintf("Invalid position %s", position))
 	}
 
 	//Can replace with a map search for piece name
-	if s := strings.Join(constants.PIECES, ""); !strings.Contains(s, pieceType) {
+	if s := strings.Join(PIECES, ""); !strings.Contains(s, pieceType) {
 		return false, errors.New(fmt.Sprintf("Invalid piece \"%s\"", pieceType))
 	}
 
@@ -39,7 +55,7 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 
 	if posIndex, err := strconv.Atoi(posArray[1]); err != nil {
 		return false, errors.New(fmt.Sprintf("Invalid position \"%s\"", position))
-	} else if posIndex < 1 || posIndex > cbLen {
+	} else if posIndex < 1 || posIndex > cb.Size {
 		return false, errors.New(fmt.Sprintf("Invalid position \"%s\", out of bound", position))
 	}
 
@@ -48,19 +64,19 @@ func ValidateMove(pieceType string, position string, cbLen int) (bool, error) {
 
 //Print a chessboard on cli with coordinates and cell names
 //for reference
-func PrintChessboard(size int) bool {
+func (cb Chessboard) PrintChessboard() bool {
 
-	fmt.Println(strings.Repeat("_", 12*size))
+	fmt.Println(strings.Repeat("_", 12*cb.Size))
 
-	for i := (size - 1); i >= 0; i-- {
+	for i := (cb.Size - 1); i >= 0; i-- {
 
 		fmt.Print("|")
 
-		for j := (size - 1); j >= 0; j-- {
-			fmt.Printf(" [%d][%d]:%s%d |", i, (size - j - 1), util.ToChar(size-j-1), i+1)
+		for j := (cb.Size - 1); j >= 0; j-- {
+			fmt.Printf(" [%d][%d]:%s%d |", i, (cb.Size - j - 1), util.ToChar(cb.Size-j-1), i+1)
 		}
 
-		fmt.Printf("\n%s", strings.Repeat("_", 12*size))
+		fmt.Printf("\n%s", strings.Repeat("_", 12*cb.Size))
 
 		if i != 0 {
 			fmt.Println()
@@ -70,9 +86,9 @@ func PrintChessboard(size int) bool {
 	return true
 }
 
-func GetCurrCoordinates(pos string) (int, int, error) {
+func (cb Chessboard) GetCurrCoordinates(pos string) (int, int, error) {
 
-	if len(pos) != constants.MIN_MAX_POSITION_LEN {
+	if len(pos) != MIN_MAX_POSITION_LEN {
 		return 0, 0, errors.New(fmt.Sprintf("Invalid position %s", pos))
 	}
 
@@ -89,7 +105,7 @@ func GetCurrCoordinates(pos string) (int, int, error) {
 	return x - 1, y, nil
 }
 
-func GetPieceWithStrategy(pieceType string) (*Piece, error) {
+func (cb Chessboard) GetPieceWithStrategy(pieceType string) (*Piece, error) {
 	switch pieceType {
 	case "PAWN":
 		return NewPiece(pieceType, Pawn{}), nil
@@ -100,4 +116,27 @@ func GetPieceWithStrategy(pieceType string) (*Piece, error) {
 	default:
 		return nil, errors.New("Invalid piece")
 	}
+}
+
+func (cb Chessboard) HandleInput() (string, string, error) {
+
+	var pieceType, position string
+
+	//Read command line aruments except the first one
+	//which is file namechessboard
+	args, err := cb.ReadMove(os.Args[1:])
+
+	if err != nil {
+		return pieceType, position, errors.New(fmt.Sprintf("Error : %s\n", err.Error()))
+	}
+
+	//Capitalise ,Trim inputs
+	pieceType, position = util.SanitizeInputs(args)
+
+	//Check for out of bound moves invalid pieces
+	if ok, err := cb.ValidateMove(pieceType, position); !ok {
+		return pieceType, position, errors.New(fmt.Sprintf("Error : %s\n", err.Error()))
+	}
+
+	return pieceType, position, nil
 }
