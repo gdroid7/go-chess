@@ -9,15 +9,17 @@ import (
 
 func TestGetPieceWithStrategy(t *testing.T) {
 
+	chessboard := chess.NewChessboard(8)
+
 	pieceTye := ""
-	_, err := chess.GetPieceWithStrategy(pieceTye)
+	_, err := chessboard.GetPieceWithStrategy(pieceTye)
 
 	if err == nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error got %s", err))
 	}
 
 	pieceTye = "PAWN"
-	piece, err := chess.GetPieceWithStrategy(pieceTye)
+	piece, err := chessboard.GetPieceWithStrategy(pieceTye)
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be nil got %T", err))
@@ -28,7 +30,7 @@ func TestGetPieceWithStrategy(t *testing.T) {
 	}
 
 	pieceTye = "KING"
-	piece, err = chess.GetPieceWithStrategy(pieceTye)
+	piece, err = chessboard.GetPieceWithStrategy(pieceTye)
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be nil got %T", err))
@@ -39,7 +41,7 @@ func TestGetPieceWithStrategy(t *testing.T) {
 	}
 
 	pieceTye = "QUEEN"
-	piece, err = chess.GetPieceWithStrategy(pieceTye)
+	piece, err = chessboard.GetPieceWithStrategy(pieceTye)
 
 	if err != nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be nil got %T", err))
@@ -50,7 +52,7 @@ func TestGetPieceWithStrategy(t *testing.T) {
 	}
 
 	pieceTye = "BISHOP"
-	piece, err = chess.GetPieceWithStrategy(pieceTye)
+	piece, err = chessboard.GetPieceWithStrategy(pieceTye)
 
 	if piece != nil || err == nil {
 		t.Fatal(fmt.Sprintf("TestGetPieceStrategy failed, expected error to be Piece & Strategy doesn't exist got nil"))

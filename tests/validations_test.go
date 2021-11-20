@@ -10,13 +10,15 @@ import (
 
 func TestReadMove(t *testing.T) {
 
-	_, err := chess.ReadMove([]string{})
+	chessboard := chess.NewChessboard(8)
+
+	_, err := chessboard.ReadMove([]string{})
 
 	if err == nil {
 		t.Fatalf("TestReadCommandLineVars failed,expected %s error got nil", errors.New("No input"))
 	}
 
-	_, err = chess.ReadMove([]string{"King", "P1"})
+	_, err = chessboard.ReadMove([]string{"King", "P1"})
 
 	if err != nil {
 		t.Fatalf("TestReadCommandLineVars failed,expected nil got %s", err.Error())
@@ -39,53 +41,53 @@ func TestSanitizeInput(t *testing.T) {
 
 func TestValidateMove(t *testing.T) {
 
-	cbLen := 2
+	chessboard := chess.NewChessboard(8)
 
-	if ok, err := chess.ValidateMove("", "", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("", ""); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid piece BI got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("KI", "A0", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("KI", "A0"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid piece KI got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("KING", "A", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("KING", "A"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid position A got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("KING", "A11", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("KING", "A11"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid position A got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("KGNI", "A1", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("KGNI", "A1"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid1 piece KNIN got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("123", "123", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("123", "123"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid input format 123 123, got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("BISHOP", "A1", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("BISHOP", "A1"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error to be Invalid piece BISHOP, got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("QUEEN", "AA", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("QUEEN", "AA"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error Invalid position \"AA\" got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("QUEEN", "A0", cbLen); err == nil {
+	if ok, err := chessboard.ValidateMove("QUEEN", "A0"); err == nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error Invalid position \"A99\" got nil", ok)
 	}
 
-	if ok, err := chess.ValidateMove("BISHOP", "ZZ1", cbLen); ok && err != nil {
+	if ok, err := chessboard.ValidateMove("BISHOP", "ZZ1"); ok && err != nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
 	}
 
-	if ok, err := chess.ValidateMove("BISHOP", "A3", cbLen); ok && err != nil {
+	if ok, err := chessboard.ValidateMove("BISHOP", "A3"); ok && err != nil {
 		t.Fatalf("TestValidateMove failed, expected status false got %t, expected error nil got %s", ok, err.Error())
 	}
 
-	if ok, err := chess.ValidateMove("KING", "A2", cbLen); !ok {
+	if ok, err := chessboard.ValidateMove("KING", "A2"); !ok {
 		t.Fatalf("TestValidateMove failed, expected status true got %t, expected error nil got %s", ok, err.Error())
 	}
 }
