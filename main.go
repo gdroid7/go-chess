@@ -1,29 +1,21 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
-	"os"
 
 	"example.com/t/chess"
-	"example.com/t/util"
 )
 
-var size = 8
-var chessboard [][]int
-
 func main() {
-	chessboard = make([][]int, size)
-	//Print chessboad for reference
-	chess.PrintChessboard(size)
-	//Run program
-	run(chessboard)
+	chessboard := chess.NewChessboard(8)
+	chessboard.PrintChessboard()
+	run(*chessboard)
 }
 
-func run(cb [][]int) {
+func run(cb chess.Chessboard) {
 
-	pieceType, position, err := handleInput()
+	pieceType, position, err := cb.HandleInput()
 
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +23,7 @@ func run(cb [][]int) {
 	}
 
 	//Get Piece sturct with moving strategy
-	piece, err := chess.GetPieceWithStrategy(pieceType)
+	piece, err := cb.GetPieceWithStrategy(pieceType)
 
 	if err != nil {
 		log.Fatal(err)
@@ -39,34 +31,11 @@ func run(cb [][]int) {
 	}
 
 	//Get coordinates from cell position
-	x, y, err := chess.GetCurrCoordinates(position)
+	x, y, err := cb.GetCurrCoordinates(position)
 
 	//Print ioutput
 	fmt.Printf("Input : %s %s\n", pieceType, position)
 	fmt.Printf("Possible moves : %s\n", piece.GetMoves(cb, x, y))
 
 	return
-}
-
-func handleInput() (string, string, error) {
-
-	var pieceType, position string
-
-	//Read command line aruments except the first one
-	//which is file namechessboard
-	args, err := chess.ReadMove(os.Args[1:])
-
-	if err != nil {
-		return pieceType, position, errors.New(fmt.Sprintf("Error : %s\n", err.Error()))
-	}
-
-	//Capitalise ,Trim inputs
-	pieceType, position = util.SanitizeInputs(args)
-
-	//Check for out of bound moves invalid pieces
-	if ok, err := chess.ValidateMove(pieceType, position, size); !ok {
-		return pieceType, position, errors.New(fmt.Sprintf("Error : %s\n", err.Error()))
-	}
-
-	return pieceType, position, nil
 }
